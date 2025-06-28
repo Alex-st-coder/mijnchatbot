@@ -3,24 +3,35 @@ const { Client } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const OpenAI = require('openai');
 
+// ✅ Проверка наличия API-ключа
+if (!process.env.OPENAI_API_KEY) {
+  console.error("❌ Переменная окружения OPENAI_API_KEY не установлена.");
+  process.exit(1);
+}
+
+// ✅ Инициализация OpenAI
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+// ✅ Настройка клиента WhatsApp
 const client = new Client({
   puppeteer: {
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
   },
 });
 
+// 📸 QR-код для авторизации
 client.on('qr', qr => {
   qrcode.generate(qr, { small: true });
 });
 
+// ✅ Бот готов
 client.on('ready', () => {
   console.log('✅ Бот готов!');
 });
 
+// 🤖 Обработка сообщений
 client.on('message', async message => {
   if (!message.fromMe) {
     const prompt = message.body;
@@ -40,4 +51,6 @@ client.on('message', async message => {
   }
 });
 
+// 🚀 Запуск бота
 client.initialize();
+console.log("🚀 Инициализация клиента...");
