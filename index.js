@@ -24,6 +24,7 @@ const client = new Client({
 // 📸 QR-код для авторизации
 client.on('qr', qr => {
   qrcode.generate(qr, { small: true });
+  console.log(`🔗 Сканируй QR-код в браузере:\nhttps://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(qr)}&size=300x300`);
 });
 
 // ✅ Бот готов
